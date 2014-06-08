@@ -11,6 +11,7 @@ Use
 ---
 
 ```shell
+go get github.com/jessejlt/configsrvs
 ./configsrvs -h
 ```
 
