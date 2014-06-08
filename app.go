@@ -21,7 +21,7 @@ func main() {
 	dataStore.validate()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/stats", statsHandler)
+	mux.HandleFunc("/", HomeHandler)
 
 	n := negroni.Classic()
 	n.UseHandler(mux)
