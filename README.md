@@ -21,6 +21,7 @@ Status
 - [x] Command line options
 - [x] Environment variables for S3 credentials
 - [x] Tests!
+- [ ] Go docs
 - S3
   - [x] S3 validation
   - [ ] S3 data retrieval
