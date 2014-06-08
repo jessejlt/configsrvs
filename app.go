@@ -13,9 +13,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Port=%d\n", cli.Port)
+	creds, err := AWSCredentials()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("AWS Creds = %v\n", creds)
+	fmt.Printf("Options = %v\n", cli)
 
 	http.HandleFunc("/stats", statsHandler)
-	http.ListenAndServe(fmt.Sprintf(":%d", cli.Port), nil)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", cli.Port), nil)
+	if err != nil {
+		log.Fatal("Failed to start server: ", err)
+	}
 	fmt.Printf("Listening on port %d", cli.Port)
 }
