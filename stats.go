@@ -1,0 +1,13 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func statsHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, jsonResponse{"foo": "bar", "beep": 1})
+}
