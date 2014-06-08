@@ -20,15 +20,15 @@ Status
 
 - [x] Command line options
 - [x] Environment variables for S3 credentials
-- [ ] Tests!
+- [x] Tests!
 - S3
   - [x] S3 validation
   - [ ] S3 data retrieval
   - [ ] S3 data update
 - JSON API
-  - [ ] GET
+  - [x] GET
   - [ ] PUT
 - Web interface
-  - [ ] Populate template
+  - [x] Populate template
   - [ ] Add some style
   - [ ] Make data updatable
