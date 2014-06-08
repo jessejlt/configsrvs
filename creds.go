@@ -1,9 +1,9 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"unicode/utf8"
-	"errors"
 )
 
 type Creds struct {
