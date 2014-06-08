@@ -12,13 +12,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	creds, err := AWSCredentials()
+	fmt.Printf("Options = %v\n", cli)
+	dataStore, err := GetDataStore(cli.DataStore)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("AWS Creds = %v\n", creds)
-	fmt.Printf("Options = %v\n", cli)
+	dataStore.validate()
 
 	http.HandleFunc("/stats", statsHandler)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", cli.Port), nil)
