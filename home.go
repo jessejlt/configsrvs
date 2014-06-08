@@ -1,20 +1,21 @@
 package main
 
 import (
-	"net/http"
-	"strings"
-	"html/template"
-	"path"
-	"encoding/json"
+  "encoding/json"
+  "html/template"
+  "net/http"
+  "path"
+  "strings"
 )
 
 type Home struct {
-	Message string
+  Message string
+	Config string
 }
 
 func serveJSON(w http.ResponseWriter, r *http.Request, h Home) {
 
-	js, err := json.Marshal(h)
+  js, err := json.Marshal(h)
   if err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
     return
@@ -26,7 +27,7 @@ func serveJSON(w http.ResponseWriter, r *http.Request, h Home) {
 
 func serveHTML(w http.ResponseWriter, r *http.Request, h Home) {
 
-	fp := path.Join("templates", "index.html")
+  fp := path.Join("templates", "index.html")
   tmpl, err := template.ParseFiles(fp)
   if err != nil {
     http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -40,11 +41,18 @@ func serveHTML(w http.ResponseWriter, r *http.Request, h Home) {
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
-	home := Home{Message: "TODO"}
-	acceptHeader := r.Header.Get("Accept")
-	if strings.Contains(acceptHeader, "application/json") {
-		serveJSON(w, r, home)
-	} else {
-		serveHTML(w, r, home)
+  RequestCount.Add(1)
+	config, err := Store.fetch()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+
+  home := Home{Message: "TODO", Config: config}
+  acceptHeader := r.Header.Get("Accept")
+  if strings.Contains(acceptHeader, "application/json") {
+    serveJSON(w, r, home)
+  } else {
+    serveHTML(w, r, home)
+  }
 }
