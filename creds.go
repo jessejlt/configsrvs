@@ -2,7 +2,8 @@ package main
 
 import (
 	"os"
-	"strings"
+	"unicode/utf8"
+	"errors"
 )
 
 type Creds struct {
@@ -12,22 +13,21 @@ type Creds struct {
 func AWSCredentials() (Creds, error) {
 
 	creds := Creds{}
-	for _, e := range os.Environ() {
-		pair := strings.Split(e, "=")
+	creds.Region = os.Getenv("AWS_DEFAULT_REGION")
+	creds.Key = os.Getenv("AWS_ACCESS_KEY_ID")
+	creds.Secret = os.Getenv("AWS_SECRET_ACCESS_KEY")
 
-		switch pair[0] {
-		case "AWS_DEFAULT_REGION":
-			creds.Region = strings.TrimSpace(pair[1])
-		case "AWS_ACCESS_KEY_ID":
-			creds.Key = strings.TrimSpace(pair[1])
-		case "AWS_SECRET_ACCESS_KEY":
-			creds.Secret = strings.TrimSpace(pair[1])
-		}
+	if utf8.RuneCountInString(creds.Region) == 0 {
+		return creds, errors.New("Missing required env.AWS_DEFAULT_REGION")
 	}
 
-	// TODO
-	// Check length of creds to ensure they were set,
-	// return error if not set
+	if utf8.RuneCountInString(creds.Key) == 0 {
+		return creds, errors.New("Missing required env.AWS_ACCESS_KEY_ID")
+	}
+
+	if utf8.RuneCountInString(creds.Secret) == 0 {
+		return creds, errors.New("Missing required env.AWS_SECRET_ACCESS_KEY")
+	}
 
 	return creds, nil
 }
