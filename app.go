@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/codegangsta/negroni"
 	"log"
 	"net/http"
 )
@@ -19,10 +20,10 @@ func main() {
 	}
 	dataStore.validate()
 
-	http.HandleFunc("/stats", statsHandler)
-	err = http.ListenAndServe(fmt.Sprintf(":%d", cli.Port), nil)
-	if err != nil {
-		log.Fatal("Failed to start server: ", err)
-	}
-	fmt.Printf("Listening on port %d", cli.Port)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/stats", statsHandler)
+
+	n := negroni.Classic()
+	n.UseHandler(mux)
+	n.Run(fmt.Sprintf(":%d", cli.Port))
 }
